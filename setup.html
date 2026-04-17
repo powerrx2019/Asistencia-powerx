@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Setup Huellas — POWERX</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F4F8; min-height: 100vh; padding: 1.5rem 1rem; }
+
+    .page-hdr { max-width: 500px; margin: 0 auto 1.25rem; }
+    h1 { font-size: 20px; font-weight: 600; color: #111827; }
+    .sub { font-size: 13px; color: #6B7280; margin-top: 4px; line-height: 1.5; }
+
+    .notice { max-width: 500px; margin: 0 auto 1rem; padding: 11px 15px; border-radius: 10px; background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; font-size: 13px; line-height: 1.6; }
+
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); max-width: 500px; margin: 0 auto 1rem; overflow: hidden; }
+    .card-hdr { padding: .875rem 1.25rem; border-bottom: 1px solid #F3F4F6; font-size: 15px; font-weight: 600; color: #111827; }
+
+    .emp-row { display: flex; align-items: center; padding: .875rem 1.25rem; border-bottom: 1px solid #F9FAFB; gap: 12px; }
+    .emp-row:last-child { border-bottom: none; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #EFF6FF; color: #1D4ED8; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+    .emp-info { flex: 1; min-width: 0; }
+    .emp-name { font-size: 15px; font-weight: 500; color: #111827; }
+    .emp-st   { font-size: 12px; margin-top: 2px; }
+    .st-ok    { color: #16A34A; }
+    .st-no    { color: #9CA3AF; }
+    .actions  { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-reg { padding: 7px 14px; border-radius: 8px; border: 1.5px solid #3B82F6; background: #EFF6FF; color: #1D4ED8; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .btn-reg:active { background: #DBEAFE; }
+    .btn-del { padding: 7px 10px; border-radius: 8px; border: 1.5px solid #FCA5A5; background: #FEF2F2; color: #B91C1C; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .btn-del:active { background: #FEE2E2; }
+
+    .msg-g { max-width: 500px; margin: 0 auto 1rem; padding: 12px 16px; border-radius: 10px; font-size: 14px; display: none; }
+    .msg-g.ok   { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+    .msg-g.err  { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+    .msg-g.info { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 5px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading { text-align: center; color: #6B7280; padding: 2rem; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="page-hdr">
+  <h1>Registro de Huellas</h1>
+  <p class="sub">Abre esta página en el celular fijo de la tienda para gestionar huellas digitales.</p>
+</div>
+
+<div class="notice">
+  <strong>Importante:</strong> Las huellas quedan vinculadas a este celular. Si lo cambias o reseteas, deberás registrarlas de nuevo.
+</div>
+
+<div class="msg-g" id="msg-g"></div>
+
+<div class="card">
+  <div class="card-hdr">Empleados</div>
+  <div id="emp-list"><div class="loading">Cargando...</div></div>
+</div>
+
+<script>
+  // ── CONFIGURACIÓN ─────────────────────────────────────────
+  // Pega aquí la URL COMPLETA de tu Google Apps Script publicado
+  // Ejemplo: https://script.google.com/macros/s/AKfycbxABC123xyz.../exec
+  const API_URL = 'https://script.google.com/macros/s/AKfycbz8O5y73x3b9o80gPo0Dd9bxp9GdLN2aGXZJ8H1XBeMaShRMOTWrJv4Lt_VqEv0GMs4YA/exec';
+  // ─────────────────────────────────────────────────────────
+
+  let employees = [];
+
+  function loadEmployees() {
+    fetch(API_URL + '?action=employees')
+      .then(function(r){ return r.json(); })
+      .then(function(emps) { employees = emps; renderList(); })
+      .catch(function() {
+        document.getElementById('emp-list').innerHTML = '<div class="loading" style="color:#B91C1C">Error al cargar. Recarga la página.</div>';
+      });
+  }
+
+  function renderList() {
+    const list = document.getElementById('emp-list');
+    if (!employees.length) { list.innerHTML = '<div class="loading">No hay empleados en la hoja.</div>'; return; }
+    list.innerHTML = employees.map(function(emp, i) {
+      const ini = emp.name.split(' ').map(function(p){ return p[0]; }).join('').substring(0,2).toUpperCase();
+      const stHtml = emp.hasFingerprint
+        ? '<span class="emp-st st-ok">● Huella registrada</span>'
+        : '<span class="emp-st st-no">○ Sin huella (solo PIN)</span>';
+      const regLabel = emp.hasFingerprint ? 'Actualizar huella' : 'Registrar huella';
+      const delBtn = emp.hasFingerprint
+        ? '<button class="btn-del" onclick="deleteFp(' + i + ')">✕</button>' : '';
+      return '<div class="emp-row">' +
+        '<div class="avatar">' + ini + '</div>' +
+        '<div class="emp-info"><div class="emp-name">' + emp.name + '</div>' + stHtml + '</div>' +
+        '<div class="actions"><button class="btn-reg" onclick="registerFp(' + i + ')">' + regLabel + '</button>' + delBtn + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function registerFp(idx) {
+    const emp = employees[idx];
+    if (!emp) return;
+    showMsg('info', '<span class="spinner"></span>' + emp.name + ': Pon el dedo en el lector...');
+
+    fetch(API_URL + '?action=challenge')
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        const challenge    = data.challenge;
+        const challengeBuf = new TextEncoder().encode(challenge);
+        const userId       = new TextEncoder().encode(emp.name);
+
+        return navigator.credentials.create({
+          publicKey: {
+            challenge        : challengeBuf,
+            rp               : { name: 'POWERX Asistencia', id: location.hostname },
+            user             : { id: userId, name: emp.name, displayName: emp.name },
+            pubKeyCredParams : [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+            authenticatorSelection: {
+              authenticatorAttachment: 'platform',
+              userVerification       : 'required',
+              residentKey            : 'discouraged'
+            },
+            timeout: 60000
+          }
+        });
+      })
+      .then(function(cred) {
+        const credId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+        return fetch(API_URL + '?action=register_fp', {
+          method : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body   : JSON.stringify({ name: emp.name, credentialId: credId })
+        });
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(res) {
+        showMsg(res.ok ? 'ok' : 'err', res.msg);
+        if (res.ok) setTimeout(loadEmployees, 1500);
+      })
+      .catch(function(err) {
+        const msg = (err.name === 'NotAllowedError')
+          ? 'Registro cancelado o huella no reconocida. Intenta de nuevo.'
+          : 'Error: ' + err.message;
+        showMsg('err', msg);
+      });
+  }
+
+  function deleteFp(idx) {
+    const emp = employees[idx];
+    if (!emp) return;
+    if (!confirm('¿Eliminar la huella de ' + emp.name + '? Solo podrá registrar con PIN.')) return;
+    fetch(API_URL + '?action=delete_fp', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ name: emp.name })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      showMsg(res.ok ? 'ok' : 'err', res.msg);
+      if (res.ok) setTimeout(loadEmployees, 1500);
+    })
+    .catch(function() { showMsg('err', 'Error de conexión.'); });
+  }
+
+  function showMsg(type, html) {
+    const el = document.getElementById('msg-g');
+    el.innerHTML = html; el.className = 'msg-g ' + type; el.style.display = 'block';
+    if (type === 'ok') setTimeout(function(){ el.style.display = 'none'; }, 4000);
+  }
+
+  loadEmployees();
+</script>
+</body>
+</html>
