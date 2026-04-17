@@ -62,8 +62,6 @@
 
 <script>
   // ── CONFIGURACIÓN ─────────────────────────────────────────
-  // Pega aquí la URL COMPLETA de tu Google Apps Script publicado
-  // Ejemplo: https://script.google.com/macros/s/AKfycbxABC123xyz.../exec
   const API_URL = 'https://script.google.com/macros/s/AKfycbz8O5y73x3b9o80gPo0Dd9bxp9GdLN2aGXZJ8H1XBeMaShRMOTWrJv4Lt_VqEv0GMs4YA/exec';
   // ─────────────────────────────────────────────────────────
 
@@ -128,7 +126,7 @@
         const credId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
         return fetch(API_URL + '?action=register_fp', {
           method : 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain' },
           body   : JSON.stringify({ name: emp.name, credentialId: credId })
         });
       })
@@ -151,7 +149,7 @@
     if (!confirm('¿Eliminar la huella de ' + emp.name + '? Solo podrá registrar con PIN.')) return;
     fetch(API_URL + '?action=delete_fp', {
       method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body   : JSON.stringify({ name: emp.name })
     })
     .then(function(r){ return r.json(); })

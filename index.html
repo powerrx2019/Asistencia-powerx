@@ -124,8 +124,7 @@
 
 <script>
   // ── CONFIGURACIÓN ──────────────────────────────────────────
-  // Pega aquí la URL COMPLETA de tu Google Apps Script publicado
-  // Ejemplo: https://script.google.com/macros/s/AKfycbxABC123xyz.../exec
+  // Cambia esta URL por la URL de tu Google Apps Script publicado
   const API_URL = 'https://script.google.com/macros/s/AKfycbz8O5y73x3b9o80gPo0Dd9bxp9GdLN2aGXZJ8H1XBeMaShRMOTWrJv4Lt_VqEv0GMs4YA/exec';
   // ──────────────────────────────────────────────────────────
 
@@ -177,6 +176,7 @@
       employees = emps;
       const grid = document.getElementById('names-grid');
       grid.innerHTML = '';
+      // Mostrar badge sábado si aplica
       if (emps.length && emps[0].isSaturday) {
         document.getElementById('sat-badge').style.display = 'inline-block';
       }
@@ -219,7 +219,7 @@
     document.getElementById('pin-toggle').textContent = pinVisible ? 'Ocultar teclado PIN' : 'Mostrar teclado PIN';
   }
 
-  // WebAuthn — funciona desde GitHub Pages y cualquier sitio HTTPS
+  // WebAuthn — funciona correctamente desde Netlify
   function doFingerprint() {
     if (!selCred) return;
     const fpBtn = document.getElementById('fp-btn');
@@ -276,7 +276,7 @@
 
     fetch(API_URL + '?action=attendance', {
       method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body   : JSON.stringify(payload)
     })
     .then(function(r){ return r.json(); })
