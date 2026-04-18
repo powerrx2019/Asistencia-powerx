@@ -14,47 +14,55 @@
     h1 { font-size: 18px; font-weight: 600; color: #111827; }
     .date-text { font-size: 12px; color: #6B7280; margin-top: 3px; }
     .sat-badge { display: inline-block; margin-top: 5px; background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
-    .clock { text-align: center; font-size: 36px; font-weight: 300; color: #111827; letter-spacing: 2px; margin-bottom: 1.25rem; }
-    .label { font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
-    .names-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.25rem; }
-    .name-btn { padding: 13px 4px; border-radius: 12px; border: 1.5px solid #E5E7EB; background: #fff; cursor: pointer; font-size: 13px; color: #374151; text-align: center; font-family: inherit; transition: all 0.15s; }
-    .name-btn:active { transform: scale(0.96); }
-    .name-btn.selected { background: #EFF6FF; border-color: #3B82F6; color: #1D4ED8; font-weight: 600; }
-    .fp-dot { font-size: 10px; display: block; margin-top: 3px; color: #22C55E; }
-    .fp-dot.none { color: #D1D5DB; }
+    .clock { text-align: center; font-size: 36px; font-weight: 300; color: #111827; letter-spacing: 2px; margin-bottom: 1.5rem; }
+
+    /* Steps */
     .steps-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px; }
     .step-bubble { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border: 2px solid #E5E7EB; color: #9CA3AF; background: #fff; transition: all 0.2s; flex-shrink: 0; }
     .step-bubble.active { border-color: #3B82F6; color: #1D4ED8; background: #EFF6FF; }
-    .step-bubble.done { border-color: #16A34A; color: #fff; background: #16A34A; }
-    .step-line { flex: 1; height: 2px; background: #E5E7EB; max-width: 40px; transition: background 0.2s; }
+    .step-bubble.done   { border-color: #16A34A; color: #fff; background: #16A34A; }
+    .step-line { flex: 1; height: 2px; background: #E5E7EB; max-width: 50px; transition: background 0.2s; }
     .step-line.done { background: #16A34A; }
-    .step-label-row { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+    .step-label-row { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
     .step-lbl { font-size: 10px; color: #9CA3AF; text-align: center; flex: 1; }
     .step-lbl.active { color: #1D4ED8; font-weight: 600; }
-    .step-lbl.done { color: #16A34A; }
-    .pin-section { margin-bottom: 1rem; }
-    .pin-display { text-align: center; font-size: 28px; letter-spacing: 12px; color: #111827; margin-bottom: 10px; min-height: 40px; }
-    .pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 220px; margin: 0 auto; }
-    .pin-key { padding: 14px 4px; border-radius: 10px; border: 1.5px solid #E5E7EB; background: #fff; font-size: 18px; font-weight: 500; color: #111827; cursor: pointer; text-align: center; font-family: inherit; transition: all 0.1s; }
+    .step-lbl.done   { color: #16A34A; }
+
+    /* PIN */
+    .label { font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; text-align: center; }
+    .pin-display { text-align: center; font-size: 32px; letter-spacing: 14px; color: #111827; margin-bottom: 14px; min-height: 44px; }
+    .pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 230px; margin: 0 auto 1.25rem; }
+    .pin-key { padding: 15px 4px; border-radius: 10px; border: 1.5px solid #E5E7EB; background: #fff; font-size: 20px; font-weight: 500; color: #111827; cursor: pointer; text-align: center; font-family: inherit; transition: all 0.1s; }
     .pin-key:active { background: #EFF6FF; border-color: #3B82F6; transform: scale(0.95); }
     .pin-key.del { font-size: 16px; color: #6B7280; }
-    .fp-section { text-align: center; margin-bottom: 1rem; }
-    .fp-btn { width: 86px; height: 86px; border-radius: 50%; border: 2.5px solid #E5E7EB; background: #F9FAFB; cursor: not-allowed; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; transition: all 0.15s; opacity: 0.4; }
-    .fp-btn.ready { border-color: #3B82F6; background: #EFF6FF; cursor: pointer; opacity: 1; }
-    .fp-btn.ready:active { transform: scale(0.93); background: #DBEAFE; }
-    .fp-btn.verified { border-color: #16A34A; background: #F0FDF4; cursor: default; opacity: 1; }
-    .fp-btn svg { width: 42px; height: 42px; }
+
+    /* Bienvenida */
+    .welcome-card { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 14px; padding: 14px 16px; text-align: center; margin-bottom: 1.25rem; display: none; }
+    .welcome-name { font-size: 22px; font-weight: 600; color: #15803D; }
+    .welcome-sub  { font-size: 13px; color: #16A34A; margin-top: 3px; }
+
+    /* Huella */
+    .fp-section { text-align: center; margin-bottom: 1rem; display: none; }
+    .fp-btn { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid #3B82F6; background: #EFF6FF; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; transition: all 0.15s; }
+    .fp-btn:active { transform: scale(0.93); background: #DBEAFE; }
+    .fp-btn.verified { border-color: #16A34A; background: #F0FDF4; cursor: default; }
+    .fp-btn svg { width: 44px; height: 44px; }
     .fp-hint { font-size: 13px; color: #6B7280; }
-    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.25rem; }
+
+    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.25rem; display: none; }
     .btn { padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all 0.15s; }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
     .btn-e { background: #16A34A; color: #fff; }
     .btn-s { background: #F3F4F6; color: #374151; border: 1.5px solid #E5E7EB; }
+
     .msg { padding: 12px 14px; border-radius: 10px; font-size: 14px; text-align: center; display: none; line-height: 1.5; margin-top: 1rem; }
     .msg.ok   { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
     .msg.err  { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
     .msg.info { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+
+    .reset-btn { background: none; border: none; color: #9CA3AF; font-size: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; display: block; margin: 8px auto 0; }
+
     .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 5px; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -75,64 +83,68 @@
 
   <div class="clock" id="clock">--:--</div>
 
-  <div id="form-area">
-    <div class="label">¿Quién eres?</div>
-    <div class="names-grid" id="names-grid">
-      <div style="grid-column:1/-1;text-align:center;color:#9CA3AF;font-size:13px;padding:1rem">Cargando...</div>
-    </div>
-
-    <div class="steps-row">
-      <div class="step-bubble" id="sb1">1</div>
-      <div class="step-line" id="sl1"></div>
-      <div class="step-bubble" id="sb2">2</div>
-      <div class="step-line" id="sl2"></div>
-      <div class="step-bubble" id="sb3">3</div>
-    </div>
-    <div class="step-label-row">
-      <span class="step-lbl" id="sl-lbl1">PIN</span>
-      <span class="step-lbl" id="sl-lbl2">Huella</span>
-      <span class="step-lbl" id="sl-lbl3">Registrar</span>
-    </div>
-
-    <div class="pin-section">
-      <div class="label" style="text-align:center">Ingresa tu PIN</div>
-      <div class="pin-display" id="pin-display">····</div>
-      <div class="pin-grid" id="pin-grid"></div>
-    </div>
-
-    <div class="fp-section">
-      <button class="fp-btn" id="fp-btn" onclick="doFingerprint()">
-        <svg viewBox="0 0 42 42" fill="none">
-          <path d="M21 5C11.6 5 4 12.6 4 22" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round" id="fp-p1"/>
-          <path d="M38 22c0 8.8-7.2 16-16 16" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round" id="fp-p2"/>
-          <path d="M13 22a8 8 0 0 1 8-8" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round" id="fp-p3"/>
-          <path d="M29 22a8 8 0 0 1-8 8" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round" id="fp-p4"/>
-          <circle cx="21" cy="22" r="3" fill="#9CA3AF" id="fp-c"/>
-        </svg>
-      </button>
-      <p class="fp-hint" id="fp-hint">Ingresa tu PIN primero</p>
-    </div>
-
-    <div class="action-row">
-      <button class="btn btn-e" id="btn-e" disabled onclick="submit('entrada')">Entrada</button>
-      <button class="btn btn-s" id="btn-s" disabled onclick="submit('salida')">Salida</button>
-    </div>
-    <div class="msg" id="msg"></div>
+  <!-- Indicador de pasos -->
+  <div class="steps-row">
+    <div class="step-bubble active" id="sb1">1</div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-bubble" id="sb2">2</div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-bubble" id="sb3">3</div>
   </div>
+  <div class="step-label-row">
+    <span class="step-lbl active" id="sl-lbl1">PIN</span>
+    <span class="step-lbl" id="sl-lbl2">Huella</span>
+    <span class="step-lbl" id="sl-lbl3">Registrar</span>
+  </div>
+
+  <!-- Paso 1: PIN -->
+  <div id="pin-section">
+    <div class="label">Ingresa tu PIN</div>
+    <div class="pin-display" id="pin-display">····</div>
+    <div class="pin-grid" id="pin-grid"></div>
+  </div>
+
+  <!-- Paso 2: Bienvenida + Huella -->
+  <div class="welcome-card" id="welcome-card">
+    <div class="welcome-name" id="welcome-name"></div>
+    <div class="welcome-sub">PIN verificado ✓</div>
+  </div>
+
+  <div class="fp-section" id="fp-section">
+    <button class="fp-btn" id="fp-btn" onclick="doFingerprint()">
+      <svg viewBox="0 0 42 42" fill="none">
+        <path d="M21 5C11.6 5 4 12.6 4 22" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p1"/>
+        <path d="M38 22c0 8.8-7.2 16-16 16" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p2"/>
+        <path d="M13 22a8 8 0 0 1 8-8" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p3"/>
+        <path d="M29 22a8 8 0 0 1-8 8" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p4"/>
+        <circle cx="21" cy="22" r="3" fill="#3B82F6" id="fp-c"/>
+      </svg>
+    </button>
+    <p class="fp-hint" id="fp-hint">Toca para verificar tu huella</p>
+    <button class="reset-btn" onclick="resetAll()">← Cambiar PIN</button>
+  </div>
+
+  <!-- Paso 3: Botones -->
+  <div class="action-row" id="action-row">
+    <button class="btn btn-e" id="btn-e" onclick="submit('entrada')">Entrada</button>
+    <button class="btn btn-s" id="btn-s" onclick="submit('salida')">Salida</button>
+  </div>
+
+  <div class="msg" id="msg"></div>
 </div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbz8O5y73x3b9o80gPo0Dd9bxp9GdLN2aGXZJ8H1XBeMaShRMOTWrJv4Lt_VqEv0GMs4YA/exec';
 
   var selName = null, selCred = null;
-  var pinOk = false, pinVal = '';
-  var fpOk = false;
+  var pinVal  = '', pinOk = false, fpOk = false;
   var authChallenge = null, authCredId = null;
-  var employees = [];
 
+  // Fecha, reloj y sábado
   var today = new Date();
   document.getElementById('date-text').textContent = today.toLocaleDateString('es-MX',
     { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  if (today.getDay() === 6) document.getElementById('sat-badge').style.display = 'inline-block';
 
   function updateClock() {
     document.getElementById('clock').textContent =
@@ -140,6 +152,7 @@
   }
   updateClock(); setInterval(updateClock, 1000);
 
+  // ── Indicador de pasos ──
   function updateSteps() {
     var sb1 = document.getElementById('sb1'), sl1 = document.getElementById('sl1');
     var sb2 = document.getElementById('sb2'), sl2 = document.getElementById('sl2');
@@ -147,33 +160,22 @@
     var lbl1 = document.getElementById('sl-lbl1');
     var lbl2 = document.getElementById('sl-lbl2');
     var lbl3 = document.getElementById('sl-lbl3');
-    if (pinOk) {
-      sb1.className = 'step-bubble done'; sb1.textContent = '✓';
-      sl1.className = 'step-line done'; lbl1.className = 'step-lbl done';
-    } else if (selName) {
-      sb1.className = 'step-bubble active'; sb1.textContent = '1';
-      sl1.className = 'step-line'; lbl1.className = 'step-lbl active';
-    } else {
-      sb1.className = 'step-bubble'; sb1.textContent = '1';
-      sl1.className = 'step-line'; lbl1.className = 'step-lbl';
-    }
     if (fpOk) {
-      sb2.className = 'step-bubble done'; sb2.textContent = '✓';
-      sl2.className = 'step-line done'; lbl2.className = 'step-lbl done';
-    } else if (pinOk) {
-      sb2.className = 'step-bubble active'; sb2.textContent = '2';
-      sl2.className = 'step-line'; lbl2.className = 'step-lbl active';
-    } else {
-      sb2.className = 'step-bubble'; sb2.textContent = '2';
-      sl2.className = 'step-line'; lbl2.className = 'step-lbl';
-    }
-    if (pinOk && fpOk) {
+      sb1.className = 'step-bubble done'; sb1.textContent = '✓'; lbl1.className = 'step-lbl done'; sl1.className = 'step-line done';
+      sb2.className = 'step-bubble done'; sb2.textContent = '✓'; lbl2.className = 'step-lbl done'; sl2.className = 'step-line done';
       sb3.className = 'step-bubble active'; sb3.textContent = '3'; lbl3.className = 'step-lbl active';
+    } else if (pinOk) {
+      sb1.className = 'step-bubble done'; sb1.textContent = '✓'; lbl1.className = 'step-lbl done'; sl1.className = 'step-line done';
+      sb2.className = 'step-bubble active'; sb2.textContent = '2'; lbl2.className = 'step-lbl active'; sl2.className = 'step-line';
+      sb3.className = 'step-bubble'; sb3.textContent = '3'; lbl3.className = 'step-lbl';
     } else {
+      sb1.className = 'step-bubble active'; sb1.textContent = '1'; lbl1.className = 'step-lbl active'; sl1.className = 'step-line';
+      sb2.className = 'step-bubble'; sb2.textContent = '2'; lbl2.className = 'step-lbl'; sl2.className = 'step-line';
       sb3.className = 'step-bubble'; sb3.textContent = '3'; lbl3.className = 'step-lbl';
     }
   }
 
+  // ── Teclado PIN ──
   var pinKeys = [1,2,3,4,5,6,7,8,9,'',0,'⌫'];
   var pinGrid = document.getElementById('pin-grid');
   pinKeys.forEach(function(k) {
@@ -183,18 +185,10 @@
     btn.disabled = k === '';
     btn.style.visibility = k === '' ? 'hidden' : 'visible';
     btn.onclick = function() {
-      if (!selName) { showMsg('info', 'Selecciona tu nombre primero.'); return; }
-      if (k === '⌫') { pinVal = pinVal.slice(0,-1); pinOk = false; fpOk = false; authChallenge = null; authCredId = null; setFpState('disabled'); }
+      if (k === '⌫') { pinVal = pinVal.slice(0,-1); }
       else if (typeof k === 'number' && pinVal.length < 4) { pinVal += k; }
       updatePinDisplay();
-      if (pinVal.length === 4) {
-        pinOk = true;
-        setFpState(selCred ? 'ready' : 'no-fp');
-        showMsg('info', selCred ? 'PIN listo. Ahora verifica tu huella.' : 'PIN listo. Este colaborador no tiene huella registrada.');
-      } else {
-        pinOk = false; fpOk = false; setFpState('disabled');
-      }
-      disableActions(); updateSteps();
+      if (pinVal.length === 4) { validatePinServer(); }
     };
     pinGrid.appendChild(btn);
   });
@@ -203,22 +197,82 @@
     document.getElementById('pin-display').textContent = '●'.repeat(pinVal.length) + '·'.repeat(4 - pinVal.length);
   }
 
-  function setFpState(state) {
-    var btn  = document.getElementById('fp-btn');
-    var hint = document.getElementById('fp-hint');
-    if (state === 'disabled') {
-      btn.className = 'fp-btn'; setFpColor('#9CA3AF');
-      hint.textContent = selName ? 'Ingresa tu PIN primero' : 'Selecciona tu nombre primero';
-    } else if (state === 'ready') {
-      btn.className = 'fp-btn ready'; setFpColor('#3B82F6');
-      hint.textContent = 'Toca para verificar tu huella';
-    } else if (state === 'verified') {
-      btn.className = 'fp-btn verified'; setFpColor('#16A34A');
-      hint.textContent = '✓ Huella verificada';
-    } else if (state === 'no-fp') {
-      btn.className = 'fp-btn'; setFpColor('#9CA3AF');
-      hint.textContent = 'Sin huella registrada — solo PIN';
-    }
+  // ── Validar PIN en servidor ──
+  function validatePinServer() {
+    setPinKeysDisabled(true);
+    showMsg('info', '<span class="spinner"></span>Validando PIN...');
+    fetch(API_URL + '?action=validate_pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ pin: pinVal })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        selName = res.name;
+        selCred = res.credentialId;
+        pinOk   = true;
+        // Mostrar bienvenida y huella
+        document.getElementById('pin-section').style.display    = 'none';
+        document.getElementById('welcome-name').textContent     = '¡Hola, ' + selName + '!';
+        document.getElementById('welcome-card').style.display   = 'block';
+        document.getElementById('fp-section').style.display     = 'block';
+        if (!selCred) {
+          // Sin huella registrada — habilitar botones directo
+          document.getElementById('fp-section').style.display   = 'none';
+          document.getElementById('action-row').style.display   = 'grid';
+          fpOk = true;
+        }
+        document.getElementById('msg').style.display = 'none';
+        updateSteps();
+      } else {
+        pinVal = ''; updatePinDisplay();
+        setPinKeysDisabled(false);
+        showMsg('err', res.msg);
+      }
+    })
+    .catch(function() {
+      pinVal = ''; updatePinDisplay();
+      setPinKeysDisabled(false);
+      showMsg('err', 'Error de conexión. Intenta de nuevo.');
+    });
+  }
+
+  function setPinKeysDisabled(val) {
+    document.querySelectorAll('.pin-key').forEach(function(b){
+      if (b.style.visibility !== 'hidden') b.disabled = val;
+    });
+  }
+
+  // ── WebAuthn ──
+  function doFingerprint() {
+    if (!selCred) return;
+    var fpBtn = document.getElementById('fp-btn');
+    fpBtn.style.pointerEvents = 'none';
+    showMsg('info', '<span class="spinner"></span>Esperando huella...');
+    fetch(API_URL + '?action=challenge')
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var challengeBuf = new TextEncoder().encode(data.challenge);
+        var credIdBuf    = _b64ToBuffer(selCred);
+        return navigator.credentials.get({
+          publicKey: { challenge: challengeBuf, allowCredentials: [{ type: 'public-key', id: credIdBuf }], userVerification: 'required', timeout: 60000 }
+        }).then(function(assertion) {
+          authChallenge = data.challenge;
+          authCredId    = btoa(String.fromCharCode(...new Uint8Array(assertion.rawId)));
+          fpOk = true;
+          fpBtn.className = 'fp-btn verified'; fpBtn.style.pointerEvents = 'none';
+          setFpColor('#16A34A');
+          document.getElementById('fp-hint').textContent = '✓ Huella verificada';
+          document.getElementById('action-row').style.display = 'grid';
+          showMsg('ok', '✓ Todo verificado. Presiona Entrada o Salida.');
+          updateSteps();
+        });
+      })
+      .catch(function(err) {
+        fpBtn.style.pointerEvents = 'auto';
+        showMsg('err', err.name === 'NotAllowedError' ? 'Huella cancelada. Intenta de nuevo.' : 'Error: ' + err.message);
+      });
   }
 
   function setFpColor(c) {
@@ -226,99 +280,54 @@
     var fc = document.getElementById('fp-c'); if(fc) fc.setAttribute('fill', c);
   }
 
-  fetch(API_URL + '?action=employees')
-    .then(function(r){ return r.json(); })
-    .then(function(emps) {
-      employees = emps;
-      var grid = document.getElementById('names-grid');
-      grid.innerHTML = '';
-      if (emps.length && emps[0].isSaturday) document.getElementById('sat-badge').style.display = 'inline-block';
-      emps.forEach(function(emp) {
-        var btn = document.createElement('button');
-        btn.className = 'name-btn';
-        var dot = emp.hasFingerprint ? '<span class="fp-dot">● huella</span>' : '<span class="fp-dot none">○ solo PIN</span>';
-        btn.innerHTML = emp.name + dot;
-        btn.onclick = function() {
-          document.querySelectorAll('.name-btn').forEach(function(b){ b.classList.remove('selected'); });
-          btn.classList.add('selected');
-          selName = emp.name; selCred = emp.credentialId;
-          pinOk = false; fpOk = false; pinVal = ''; authChallenge = null; authCredId = null;
-          updatePinDisplay(); disableActions(); setFpState('disabled'); updateSteps();
-          document.getElementById('msg').style.display = 'none';
-        };
-        grid.appendChild(btn);
-      });
-      updateSteps();
-    })
-    .catch(function() {
-      document.getElementById('names-grid').innerHTML =
-        '<div style="grid-column:1/-1;text-align:center;color:#B91C1C;font-size:13px;padding:1rem">Error de conexión. Recarga la página.</div>';
-    });
-
-  function doFingerprint() {
-    if (!pinOk || !selCred) return;
-    var fpBtn = document.getElementById('fp-btn');
-    fpBtn.className = 'fp-btn'; setFpColor('#9CA3AF');
-    showMsg('info', '<span class="spinner"></span>Esperando huella...');
-    fetch(API_URL + '?action=challenge')
-      .then(function(r){ return r.json(); })
-      .then(function(data) {
-        var challenge    = data.challenge;
-        var challengeBuf = new TextEncoder().encode(challenge);
-        var credIdBuf    = _b64ToBuffer(selCred);
-        return navigator.credentials.get({
-          publicKey: { challenge: challengeBuf, allowCredentials: [{ type: 'public-key', id: credIdBuf }], userVerification: 'required', timeout: 60000 }
-        }).then(function(assertion) {
-          authChallenge = challenge;
-          authCredId    = btoa(String.fromCharCode(...new Uint8Array(assertion.rawId)));
-          fpOk = true;
-          setFpState('verified');
-          enableActions();
-          showMsg('ok', '✓ PIN y huella verificados. Presiona Entrada o Salida.');
-          updateSteps();
-        });
-      })
-      .catch(function(err) {
-        setFpState('ready');
-        showMsg('err', err.name === 'NotAllowedError' ? 'Huella cancelada. Intenta de nuevo.' : 'Error: ' + err.message);
-      });
-  }
-
+  // ── Enviar registro ──
   function submit(type) {
     if (!selName || !pinOk || !fpOk) return;
-    disableActions();
+    document.getElementById('btn-e').disabled = true;
+    document.getElementById('btn-s').disabled = true;
     showMsg('info', '<span class="spinner"></span>Registrando ' + type + '...');
-    var payload = { name: selName, type: type, method: 'both', pin: pinVal, credentialId: authCredId, challenge: authChallenge };
+    var payload = { name: selName, type: type, method: selCred ? 'both' : 'pin', pin: pinVal };
+    if (selCred) { payload.credentialId = authCredId; payload.challenge = authChallenge; }
     fetch(API_URL + '?action=attendance', {
       method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload)
     })
     .then(function(r){ return r.json(); })
     .then(function(res) {
       showMsg(res.ok ? 'ok' : 'err', res.msg);
-      if (res.ok) {
-        setTimeout(function() {
-          document.querySelectorAll('.name-btn').forEach(function(b){ b.classList.remove('selected'); });
-          selName = null; selCred = null; pinOk = false; fpOk = false; pinVal = '';
-          authChallenge = null; authCredId = null;
-          updatePinDisplay(); disableActions(); setFpState('disabled'); updateSteps();
-          document.getElementById('msg').style.display = 'none';
-        }, 3500);
-      } else { enableActions(); }
+      if (res.ok) { setTimeout(resetAll, 3500); }
+      else { document.getElementById('btn-e').disabled = false; document.getElementById('btn-s').disabled = false; }
     })
-    .catch(function() { showMsg('err', 'Error de conexión. Intenta de nuevo.'); enableActions(); });
+    .catch(function() {
+      showMsg('err', 'Error de conexión. Intenta de nuevo.');
+      document.getElementById('btn-e').disabled = false; document.getElementById('btn-s').disabled = false;
+    });
   }
 
-  function enableActions()  { document.getElementById('btn-e').disabled = false; document.getElementById('btn-s').disabled = false; }
-  function disableActions() { document.getElementById('btn-e').disabled = true;  document.getElementById('btn-s').disabled = true;  }
-  function showMsg(type, html) { var el = document.getElementById('msg'); el.innerHTML = html; el.className = 'msg ' + type; el.style.display = 'block'; }
+  // ── Reset completo ──
+  function resetAll() {
+    selName = null; selCred = null; pinVal = ''; pinOk = false; fpOk = false;
+    authChallenge = null; authCredId = null;
+    updatePinDisplay();
+    setPinKeysDisabled(false);
+    document.getElementById('pin-section').style.display    = 'block';
+    document.getElementById('welcome-card').style.display   = 'none';
+    document.getElementById('fp-section').style.display     = 'none';
+    document.getElementById('action-row').style.display     = 'none';
+    document.getElementById('msg').style.display            = 'none';
+    var fpBtn = document.getElementById('fp-btn');
+    fpBtn.className = 'fp-btn'; fpBtn.style.pointerEvents = 'auto';
+    setFpColor('#3B82F6');
+    document.getElementById('fp-hint').textContent = 'Toca para verificar tu huella';
+    updateSteps();
+  }
+
+  function showMsg(type, html) {
+    var el = document.getElementById('msg'); el.innerHTML = html; el.className = 'msg ' + type; el.style.display = 'block';
+  }
   function _b64ToBuffer(b64) {
     var bin = atob(b64.replace(/-/g,'+').replace(/_/g,'/'));
-    var buf = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-    return buf.buffer;
+    var buf = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i); return buf.buffer;
   }
-
-  updateSteps();
 </script>
 </body>
 </html>
