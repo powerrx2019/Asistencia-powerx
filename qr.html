@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POWERX · Generar QR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF6B00;
+      --bg:     #080808;
+      --text:   #F0F0F0;
+      --muted:  #666;
+      --border: #2A2A2A;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 24px 48px;
+    }
+
+    .page-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    /* ── URL INPUT ── */
+    .url-section {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 32px;
+    }
+
+    .url-label {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .url-hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .url-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .url-input {
+      flex: 1;
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .url-input:focus { border-color: var(--orange); }
+
+    .btn-gen {
+      background: var(--orange);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: white;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+
+    .btn-gen:active { opacity: 0.8; }
+
+    /* ── QR CARD (pantalla) ── */
+    #qrCard {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .qr-store-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+
+    .qr-store-sub {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    #qrCanvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 auto 24px;
+      width: fit-content;
+    }
+
+    .qr-cta {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .qr-hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── BOTONES DE ACCIÓN ── */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .btn-print, .btn-dl {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-print {
+      background: var(--orange);
+      color: white;
+    }
+    .btn-print:active { opacity: 0.85; }
+
+    .btn-dl {
+      background: transparent;
+      color: var(--orange);
+      border: 1.5px solid var(--orange);
+    }
+    .btn-dl:active { opacity: 0.7; }
+
+    /* ── URL MOSTRADA ── */
+    .url-display {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      background: #0D0D0D;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════
+       VERSIÓN DE IMPRESIÓN
+    ═══════════════════════════════════ */
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .page-logo, .page-title, .url-section, .action-row,
+      .url-display, .btn-print, .btn-dl { display: none !important; }
+
+      #qrCard {
+        display: block !important;
+        background: white;
+        border: none;
+        border-radius: 0;
+        padding: 40px 32px;
+        max-width: 100%;
+        box-shadow: none;
+      }
+
+      .qr-store-name { color: #FF6B00; font-size: 2.4rem; }
+      .qr-store-sub  { color: #888; }
+
+      #qrCanvas {
+        border: 2px solid #eee;
+        padding: 24px;
+      }
+
+      .qr-cta  { color: black; font-size: 1.4rem; }
+      .qr-hint { color: #666; }
+
+      /* Marco de recorte */
+      #qrCard::after {
+        content: '- - - - - - - - - - - - - - - - - - - - - - - -';
+        display: block;
+        margin-top: 32px;
+        font-size: 0.7rem;
+        color: #ccc;
+        letter-spacing: 2px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-logo">POWERX</div>
+  <div class="page-title">Generador de QR · Solo uso admin</div>
+
+  <!-- URL INPUT -->
+  <div class="url-section">
+    <div class="url-label">URL de tu GitHub Pages</div>
+    <div class="url-hint">
+      Reemplaza <strong>TU_USUARIO</strong> con tu nombre de usuario de GitHub y pega la URL completa de tu <code>index.html</code>.
+    </div>
+    <div class="url-row">
+      <input
+        class="url-input"
+        type="url"
+        id="urlInput"
+        placeholder="https://TU_USUARIO.github.io/asistencia-powerx/index.html"
+        value="https://TU_USUARIO.github.io/asistencia-powerx/index.html"
+      >
+      <button class="btn-gen" onclick="generateQR()">GENERAR</button>
+    </div>
+  </div>
+
+  <!-- QR CARD -->
+  <div id="qrCard">
+    <div class="qr-store-name">POWERX</div>
+    <div class="qr-store-sub">Registro de Asistencia</div>
+    <div id="qrCanvas"></div>
+    <div class="qr-cta">ESCANEA PARA REGISTRAR</div>
+    <div class="qr-hint">Usa la cámara de tu celular · Solo en tienda</div>
+  </div>
+
+  <!-- BOTONES -->
+  <div class="action-row" id="actionRow" style="display:none">
+    <button class="btn-print" onclick="window.print()">🖨 IMPRIMIR</button>
+    <button class="btn-dl" onclick="downloadQR()">⬇ DESCARGAR</button>
+  </div>
+
+  <div class="url-display" id="urlDisplay" style="display:none"></div>
+
+  <script>
+  // ══════════════════════════════════════════════════════════
+  //  Al cargar la página, si el valor del input ya está
+  //  personalizado, genera el QR automáticamente.
+  // ══════════════════════════════════════════════════════════
+  let qrInstance = null;
+
+  function generateQR() {
+    const url = document.getElementById('urlInput').value.trim();
+
+    if (!url || url.includes('TU_USUARIO')) {
+      alert('⚠️ Reemplaza TU_USUARIO con tu nombre de usuario de GitHub antes de generar.');
+      return;
+    }
+
+    // Limpiar QR anterior
+    const canvas = document.getElementById('qrCanvas');
+    canvas.innerHTML = '';
+
+    if (qrInstance) {
+      qrInstance.clear();
+      qrInstance = null;
+    }
+
+    // Generar QR
+    qrInstance = new QRCode(canvas, {
+      text:         url,
+      width:        240,
+      height:       240,
+      colorDark:    '#000000',
+      colorLight:   '#FFFFFF',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Mostrar card y botones
+    document.getElementById('qrCard').style.display  = 'block';
+    document.getElementById('actionRow').style.display = 'flex';
+
+    const disp = document.getElementById('urlDisplay');
+    disp.style.display = 'block';
+    disp.textContent   = '🔗 ' + url;
+
+    // Scroll suave al QR
+    document.getElementById('qrCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function downloadQR() {
+    // Esperar a que el canvas esté listo
+    setTimeout(() => {
+      const canvas = document.querySelector('#qrCanvas canvas');
+      if (!canvas) {
+        alert('Primero genera el QR');
+        return;
+      }
+      const link    = document.createElement('a');
+      link.download = 'QR_POWERX_Asistencia.png';
+      link.href     = canvas.toDataURL('image/png');
+      link.click();
+    }, 100);
+  }
+
+  // Auto-generar si la URL ya tiene valor personalizado al cargar
+  window.addEventListener('load', () => {
+    const val = document.getElementById('urlInput').value;
+    if (val && !val.includes('TU_USUARIO')) {
+      generateQR();
+    }
+  });
+  </script>
+
+</body>
+</html>

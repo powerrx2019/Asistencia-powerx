@@ -2,332 +2,823 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Registro de Asistencia — POWERX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>POWERX · Asistencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F4F8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-    .card { background: #fff; border-radius: 20px; padding: 1.75rem 1.5rem; max-width: 380px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.09); }
-    .header { text-align: center; margin-bottom: 1.25rem; }
-    .logo { width: 52px; height: 52px; border-radius: 14px; background: #1D4ED8; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
-    .logo svg { width: 28px; height: 28px; }
-    h1 { font-size: 18px; font-weight: 600; color: #111827; }
-    .date-text { font-size: 12px; color: #6B7280; margin-top: 3px; }
-    .sat-badge { display: inline-block; margin-top: 5px; background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
-    .clock { text-align: center; font-size: 36px; font-weight: 300; color: #111827; letter-spacing: 2px; margin-bottom: 1.5rem; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Steps */
-    .steps-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px; }
-    .step-bubble { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border: 2px solid #E5E7EB; color: #9CA3AF; background: #fff; transition: all 0.2s; flex-shrink: 0; }
-    .step-bubble.active { border-color: #3B82F6; color: #1D4ED8; background: #EFF6FF; }
-    .step-bubble.done   { border-color: #16A34A; color: #fff; background: #16A34A; }
-    .step-line { flex: 1; height: 2px; background: #E5E7EB; max-width: 50px; transition: background 0.2s; }
-    .step-line.done { background: #16A34A; }
-    .step-label-row { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-    .step-lbl { font-size: 10px; color: #9CA3AF; text-align: center; flex: 1; }
-    .step-lbl.active { color: #1D4ED8; font-weight: 600; }
-    .step-lbl.done   { color: #16A34A; }
+    :root {
+      --orange:      #FF6B00;
+      --orange-dim:  #CC5500;
+      --bg:          #080808;
+      --surface:     #121212;
+      --surface2:    #1C1C1C;
+      --surface3:    #242424;
+      --text:        #F0F0F0;
+      --muted:       #666666;
+      --muted2:      #444444;
+      --success:     #00E676;
+      --error:       #FF3D3D;
+      --border:      #2A2A2A;
+    }
 
-    /* PIN */
-    .label { font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; text-align: center; }
-    .pin-display { text-align: center; font-size: 32px; letter-spacing: 14px; color: #111827; margin-bottom: 14px; min-height: 44px; }
-    .pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 230px; margin: 0 auto 1.25rem; }
-    .pin-key { padding: 15px 4px; border-radius: 10px; border: 1.5px solid #E5E7EB; background: #fff; font-size: 20px; font-weight: 500; color: #111827; cursor: pointer; text-align: center; font-family: inherit; transition: all 0.1s; }
-    .pin-key:active { background: #EFF6FF; border-color: #3B82F6; transform: scale(0.95); }
-    .pin-key.del { font-size: 16px; color: #6B7280; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overscroll-behavior: none;
+    }
 
-    /* Bienvenida */
-    .welcome-card { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 14px; padding: 14px 16px; text-align: center; margin-bottom: 1.25rem; display: none; }
-    .welcome-name { font-size: 22px; font-weight: 600; color: #15803D; }
-    .welcome-sub  { font-size: 13px; color: #16A34A; margin-top: 3px; }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100dvh;
+      padding: 0 0 env(safe-area-inset-bottom);
+    }
 
-    /* Huella */
-    .fp-section { text-align: center; margin-bottom: 1rem; display: none; }
-    .fp-btn { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid #3B82F6; background: #EFF6FF; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; transition: all 0.15s; }
-    .fp-btn:active { transform: scale(0.93); background: #DBEAFE; }
-    .fp-btn.verified { border-color: #16A34A; background: #F0FDF4; cursor: default; }
-    .fp-btn svg { width: 44px; height: 44px; }
-    .fp-hint { font-size: 13px; color: #6B7280; }
+    /* ── HEADER ── */
+    .header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 0;
+    }
 
-    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.25rem; display: none; }
-    .btn { padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all 0.15s; }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-    .btn-e { background: #16A34A; color: #fff; }
-    .btn-s { background: #F3F4F6; color: #374151; border: 1.5px solid #E5E7EB; }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--orange);
+    }
 
-    .msg { padding: 12px 14px; border-radius: 10px; font-size: 14px; text-align: center; display: none; line-height: 1.5; margin-top: 1rem; }
-    .msg.ok   { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
-    .msg.err  { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
-    .msg.info { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    .clock {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
 
-    .reset-btn { background: none; border: none; color: #9CA3AF; font-size: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; display: block; margin: 8px auto 0; }
+    /* ── LOCATION STRIP ── */
+    .location-strip {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-bottom: 1px solid var(--border);
+    }
 
-    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 5px; }
+    .loc-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+      transition: background 0.4s;
+    }
+    .loc-dot.checking { background: var(--orange); animation: blink 1s infinite; }
+    .loc-dot.ok       { background: var(--success); }
+    .loc-dot.bad      { background: var(--error); }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .loc-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      flex: 1;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px 24px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── STEP: PIN ── */
+    #stepPin { display: flex; flex-direction: column; }
+
+    .step-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .step-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    /* PIN dots */
+    .pin-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .pin-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--muted2);
+      transition: all 0.15s ease;
+    }
+    .pin-dot.filled {
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: scale(1.2);
+    }
+    .pin-dot.error {
+      background: var(--error);
+      border-color: var(--error);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)} 60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}
+    }
+
+    /* Keypad */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .key {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0;
+      height: 72px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .key:active {
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: scale(0.93);
+    }
+
+    .key.key-del {
+      font-size: 1.3rem;
+      color: var(--muted);
+    }
+
+    .key.key-empty { visibility: hidden; }
+
+    .pin-msg {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--error);
+      min-height: 20px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .pin-msg.show { opacity: 1; }
+
+    /* ── STEP: WEBAUTHN ── */
+    #stepWebAuthn {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .greet-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .webauthn-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 240px;
+      line-height: 1.5;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    .webauthn-err {
+      font-size: 0.85rem;
+      color: var(--error);
+      max-width: 260px;
+    }
+
+    /* ── STEP: ACCIÓN ── */
+    #stepAction {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .action-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .action-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .action-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .action-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .action-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 28px;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 20px;
+      border-radius: 18px;
+      border: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      margin-bottom: 12px;
+    }
+
+    .btn-entrada {
+      background: var(--orange);
+      color: white;
+    }
+    .btn-entrada:active { background: var(--orange-dim); transform: scale(0.97); }
+
+    .btn-salida {
+      background: transparent;
+      color: var(--orange);
+      border: 2px solid var(--orange);
+    }
+    .btn-salida:active { background: rgba(255,107,0,.12); transform: scale(0.97); }
+
+    .btn-action:disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .action-msg {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      min-height: 20px;
+    }
+    .action-msg.error   { color: var(--error); }
+    .action-msg.loading { color: var(--muted); }
+
+    /* ── STEP: ÉXITO ── */
+    #stepSuccess {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .success-badge {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+    }
+    .success-badge.entrada { background: rgba(0,230,118,.12); }
+    .success-badge.salida  { background: rgba(255,61,61,.12); }
+
+    .success-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .success-detail {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .success-time-big {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .btn-reset {
+      margin-top: 24px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 28px;
+      color: var(--muted);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-reset:active { background: var(--surface3); }
+
+    /* ── UTILIDADES ── */
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-<div class="card">
+
   <div class="header">
-    <div class="logo">
-      <svg viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="9" r="4.5" stroke="white" stroke-width="2"/>
-        <path d="M5 24c0-5 4-8.5 9-8.5s9 3.5 9 8.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <div class="logo">POWERX</div>
+    <div class="clock" id="clockDisplay">--:--</div>
+  </div>
+
+  <div class="location-strip">
+    <div class="loc-dot checking" id="locDot"></div>
+    <span class="loc-text" id="locText">Verificando ubicación…</span>
+  </div>
+
+  <div class="content">
+
+    <!-- ────── PASO 1: PIN ────── -->
+    <div id="stepPin">
+      <div class="step-heading">INGRESA</div>
+      <div class="step-heading" style="color:var(--orange)">TU PIN</div>
+      <div class="step-sub">4 dígitos · Solo tú lo conoces</div>
+
+      <div class="pin-row" id="pinRow">
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+      </div>
+
+      <div class="keypad" id="keypad">
+        <button class="key" data-k="1">1</button>
+        <button class="key" data-k="2">2</button>
+        <button class="key" data-k="3">3</button>
+        <button class="key" data-k="4">4</button>
+        <button class="key" data-k="5">5</button>
+        <button class="key" data-k="6">6</button>
+        <button class="key" data-k="7">7</button>
+        <button class="key" data-k="8">8</button>
+        <button class="key" data-k="9">9</button>
+        <button class="key key-empty" disabled></button>
+        <button class="key" data-k="0">0</button>
+        <button class="key key-del" id="keyDel">⌫</button>
+      </div>
+
+      <div class="pin-msg" id="pinMsg"></div>
     </div>
-    <h1>Registro de Asistencia</h1>
-    <p class="date-text" id="date-text"></p>
-    <div id="sat-badge" class="sat-badge" style="display:none">Sábado · Turno 9:00–14:00</div>
-  </div>
 
-  <div class="clock" id="clock">--:--</div>
+    <!-- ────── PASO 2: WEBAUTHN ────── -->
+    <div id="stepWebAuthn">
+      <div class="avatar" id="waAvatar">?</div>
+      <div class="greet-name" id="waName">Verificando…</div>
+      <div class="webauthn-hint" id="waHint">
+        Confirma tu identidad con la biometría de tu celular
+      </div>
+      <div class="spinner" id="waSpinner"></div>
+      <div class="webauthn-err hidden" id="waErr"></div>
+    </div>
 
-  <!-- Indicador de pasos -->
-  <div class="steps-row">
-    <div class="step-bubble active" id="sb1">1</div>
-    <div class="step-line" id="sl1"></div>
-    <div class="step-bubble" id="sb2">2</div>
-    <div class="step-line" id="sl2"></div>
-    <div class="step-bubble" id="sb3">3</div>
-  </div>
-  <div class="step-label-row">
-    <span class="step-lbl active" id="sl-lbl1">PIN</span>
-    <span class="step-lbl" id="sl-lbl2">Huella</span>
-    <span class="step-lbl" id="sl-lbl3">Registrar</span>
-  </div>
+    <!-- ────── PASO 3: ACCIÓN ────── -->
+    <div id="stepAction">
+      <div class="action-header">
+        <div class="action-avatar" id="actAvatar">?</div>
+        <div>
+          <div class="action-name" id="actName">—</div>
+          <div class="action-sub">¿Qué deseas registrar?</div>
+        </div>
+      </div>
+      <div class="action-divider"></div>
 
-  <!-- Paso 1: PIN -->
-  <div id="pin-section">
-    <div class="label">Ingresa tu PIN</div>
-    <div class="pin-display" id="pin-display">····</div>
-    <div class="pin-grid" id="pin-grid"></div>
-  </div>
+      <button class="btn-action btn-entrada" id="btnEntrada">
+        <span>⬤</span> ENTRADA
+      </button>
+      <button class="btn-action btn-salida" id="btnSalida">
+        <span>◯</span> SALIDA
+      </button>
 
-  <!-- Paso 2: Bienvenida + Huella -->
-  <div class="welcome-card" id="welcome-card">
-    <div class="welcome-name" id="welcome-name"></div>
-    <div class="welcome-sub">PIN verificado ✓</div>
-  </div>
+      <div class="action-msg" id="actMsg"></div>
+    </div>
 
-  <div class="fp-section" id="fp-section">
-    <button class="fp-btn" id="fp-btn" onclick="doFingerprint()">
-      <svg viewBox="0 0 42 42" fill="none">
-        <path d="M21 5C11.6 5 4 12.6 4 22" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p1"/>
-        <path d="M38 22c0 8.8-7.2 16-16 16" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p2"/>
-        <path d="M13 22a8 8 0 0 1 8-8" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p3"/>
-        <path d="M29 22a8 8 0 0 1-8 8" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" id="fp-p4"/>
-        <circle cx="21" cy="22" r="3" fill="#3B82F6" id="fp-c"/>
-      </svg>
-    </button>
-    <p class="fp-hint" id="fp-hint">Toca para verificar tu huella</p>
-    <button class="reset-btn" onclick="resetAll()">← Cambiar PIN</button>
-  </div>
+    <!-- ────── PASO 4: ÉXITO ────── -->
+    <div id="stepSuccess">
+      <div class="success-badge" id="successBadge">
+        <span id="successIcon">✓</span>
+      </div>
+      <div class="success-title" id="successTitle">REGISTRADO</div>
+      <div class="success-detail" id="successDetail">—</div>
+      <div class="success-time-big" id="successTimeBig">--:--</div>
+      <button class="btn-reset" onclick="resetApp()">Nuevo registro</button>
+    </div>
 
-  <!-- Paso 3: Botones -->
-  <div class="action-row" id="action-row">
-    <button class="btn btn-e" id="btn-e" onclick="submit('entrada')">Entrada</button>
-    <button class="btn btn-s" id="btn-s" onclick="submit('salida')">Salida</button>
-  </div>
+  </div><!-- /content -->
 
-  <div class="msg" id="msg"></div>
-</div>
+  <script>
+  // ══════════════════════════════════════════════════════════
+  //  ▶  CONFIGURACIÓN  —  REEMPLAZA LA URL
+  // ══════════════════════════════════════════════════════════
+  const GAS_URL      = 'https://script.google.com/macros/s/AKfycbyZWc4lQRxUTpy_q6tz8vuWr1pqdZxvw06psysk3Tb2u9fnyWYum7V1rPlp7sQlHSPIuA/exec';
+  const STORE_LAT    = 21.501675;
+  const STORE_LNG    = -104.902560;
+  const MAX_DIST     = 100; // metros
+  // ══════════════════════════════════════════════════════════
 
-<script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzM4qJ6qfa2orYY7ah9U_sJWCHsjULn2Sohnxi-B25RpnPv-jvXvWLN_b6NkoY6uvWZ/exec';
+  // Estado
+  let pin          = '';
+  let locationOK   = false;
+  let userLat      = null;
+  let userLng      = null;
+  let employee     = null;   // { id, name }
+  let credentialId = null;   // base64 string
+  let busy         = false;
 
-  var selName = null, selCred = null;
-  var pinVal  = '', pinOk = false, fpOk = false;
-  var authChallenge = null, authCredId = null;
-
-  // Fecha, reloj y sábado
-  var today = new Date();
-  document.getElementById('date-text').textContent = today.toLocaleDateString('es-MX',
-    { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  if (today.getDay() === 6) document.getElementById('sat-badge').style.display = 'inline-block';
-
-  function updateClock() {
-    document.getElementById('clock').textContent =
-      new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+  // ─── RELOJ ───────────────────────────────────────────────
+  function tickClock() {
+    const now = new Date();
+    document.getElementById('clockDisplay').textContent =
+      now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
   }
-  updateClock(); setInterval(updateClock, 1000);
+  setInterval(tickClock, 1000);
+  tickClock();
 
-  // ── Indicador de pasos ──
-  function updateSteps() {
-    var sb1 = document.getElementById('sb1'), sl1 = document.getElementById('sl1');
-    var sb2 = document.getElementById('sb2'), sl2 = document.getElementById('sl2');
-    var sb3 = document.getElementById('sb3');
-    var lbl1 = document.getElementById('sl-lbl1');
-    var lbl2 = document.getElementById('sl-lbl2');
-    var lbl3 = document.getElementById('sl-lbl3');
-    if (fpOk) {
-      sb1.className = 'step-bubble done'; sb1.textContent = '✓'; lbl1.className = 'step-lbl done'; sl1.className = 'step-line done';
-      sb2.className = 'step-bubble done'; sb2.textContent = '✓'; lbl2.className = 'step-lbl done'; sl2.className = 'step-line done';
-      sb3.className = 'step-bubble active'; sb3.textContent = '3'; lbl3.className = 'step-lbl active';
-    } else if (pinOk) {
-      sb1.className = 'step-bubble done'; sb1.textContent = '✓'; lbl1.className = 'step-lbl done'; sl1.className = 'step-line done';
-      sb2.className = 'step-bubble active'; sb2.textContent = '2'; lbl2.className = 'step-lbl active'; sl2.className = 'step-line';
-      sb3.className = 'step-bubble'; sb3.textContent = '3'; lbl3.className = 'step-lbl';
+  // ─── GEOLOCALIZACIÓN ─────────────────────────────────────
+  function initGeo() {
+    if (!navigator.geolocation) {
+      setGeo('bad', 'GPS no disponible en este dispositivo');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(onGeoOK, onGeoErr,
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  }
+
+  function onGeoOK(pos) {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+    const d = haversine(userLat, userLng, STORE_LAT, STORE_LNG);
+    if (d <= MAX_DIST) {
+      locationOK = true;
+      setGeo('ok', `En tienda · ${Math.round(d)} m`);
     } else {
-      sb1.className = 'step-bubble active'; sb1.textContent = '1'; lbl1.className = 'step-lbl active'; sl1.className = 'step-line';
-      sb2.className = 'step-bubble'; sb2.textContent = '2'; lbl2.className = 'step-lbl'; sl2.className = 'step-line';
-      sb3.className = 'step-bubble'; sb3.textContent = '3'; lbl3.className = 'step-lbl';
+      locationOK = false;
+      setGeo('bad', `Fuera de rango · ${Math.round(d)} m de la tienda`);
     }
   }
 
-  // ── Teclado PIN ──
-  var pinKeys = [1,2,3,4,5,6,7,8,9,'',0,'⌫'];
-  var pinGrid = document.getElementById('pin-grid');
-  pinKeys.forEach(function(k) {
-    var btn = document.createElement('button');
-    btn.className = 'pin-key' + (k === '⌫' ? ' del' : '');
-    btn.textContent = k === '' ? '' : k;
-    btn.disabled = k === '';
-    btn.style.visibility = k === '' ? 'hidden' : 'visible';
-    btn.onclick = function() {
-      if (k === '⌫') { pinVal = pinVal.slice(0,-1); }
-      else if (typeof k === 'number' && pinVal.length < 4) { pinVal += k; }
-      updatePinDisplay();
-      if (pinVal.length === 4) { validatePinServer(); }
-    };
-    pinGrid.appendChild(btn);
+  function onGeoErr(e) {
+    locationOK = false;
+    setGeo('bad', e.code === 1
+      ? 'Permiso de ubicación denegado'
+      : 'No se pudo obtener tu ubicación');
+  }
+
+  function setGeo(state, txt) {
+    const dot = document.getElementById('locDot');
+    dot.className = 'loc-dot ' + (state === 'ok' ? 'ok' : state === 'bad' ? 'bad' : 'checking');
+    document.getElementById('locText').textContent = txt;
+  }
+
+  // ─── TECLADO PIN ─────────────────────────────────────────
+  document.querySelectorAll('.key[data-k]').forEach(btn => {
+    btn.addEventListener('click', () => pressKey(btn.dataset.k));
   });
+  document.getElementById('keyDel').addEventListener('click', delKey);
 
-  function updatePinDisplay() {
-    document.getElementById('pin-display').textContent = '●'.repeat(pinVal.length) + '·'.repeat(4 - pinVal.length);
+  function pressKey(digit) {
+    if (busy || pin.length >= 4) return;
+    pin += digit;
+    renderPinDots();
+    if (pin.length === 4) {
+      busy = true;
+      setTimeout(submitPin, 250);
+    }
   }
 
-  // ── Validar PIN en servidor ──
-  function validatePinServer() {
-    setPinKeysDisabled(true);
-    showMsg('info', '<span class="spinner"></span>Validando PIN...');
-    fetch(API_URL + '?action=validate_pin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ pin: pinVal })
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(res) {
-      if (res.ok) {
-        selName = res.name;
-        selCred = res.credentialId;
-        pinOk   = true;
-        // Mostrar bienvenida y huella
-        document.getElementById('pin-section').style.display    = 'none';
-        document.getElementById('welcome-name').textContent     = '¡Hola, ' + selName + '!';
-        document.getElementById('welcome-card').style.display   = 'block';
-        document.getElementById('fp-section').style.display     = 'block';
-        if (!selCred) {
-          // Sin huella registrada — habilitar botones directo
-          document.getElementById('fp-section').style.display   = 'none';
-          document.getElementById('action-row').style.display   = 'grid';
-          fpOk = true;
-        }
-        document.getElementById('msg').style.display = 'none';
-        updateSteps();
-      } else {
-        pinVal = ''; updatePinDisplay();
-        setPinKeysDisabled(false);
-        showMsg('err', res.msg);
+  function delKey() {
+    if (busy) return;
+    pin = pin.slice(0, -1);
+    renderPinDots();
+    setPinMsg('');
+  }
+
+  function renderPinDots(state) {
+    for (let i = 0; i < 4; i++) {
+      const el = document.getElementById('d' + i);
+      el.className = 'pin-dot' +
+        (i < pin.length ? (state === 'error' ? ' error' : ' filled') : '');
+    }
+  }
+
+  function setPinMsg(msg) {
+    const el = document.getElementById('pinMsg');
+    el.textContent = msg;
+    el.classList.toggle('show', msg !== '');
+  }
+
+  async function submitPin() {
+    // Verificar ubicación antes de todo
+    if (!locationOK) {
+      renderPinDots('error');
+      setPinMsg('📍 Debes estar en la tienda para registrar asistencia');
+      setTimeout(() => { pin = ''; renderPinDots(); busy = false; }, 1800);
+      return;
+    }
+
+    try {
+      const res  = await fetch(`${GAS_URL}?action=validate_pin&pin=${encodeURIComponent(pin)}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        renderPinDots('error');
+        setPinMsg('PIN incorrecto — intenta de nuevo');
+        setTimeout(() => { pin = ''; renderPinDots(); setPinMsg(''); busy = false; }, 1500);
+        return;
       }
-    })
-    .catch(function() {
-      pinVal = ''; updatePinDisplay();
-      setPinKeysDisabled(false);
-      showMsg('err', 'Error de conexión. Intenta de nuevo.');
-    });
+
+      if (!data.deviceRegistered) {
+        renderPinDots('error');
+        setPinMsg('⚠️ Dispositivo no registrado. Habla con el administrador.');
+        setTimeout(() => { pin = ''; renderPinDots(); setPinMsg(''); busy = false; }, 2500);
+        return;
+      }
+
+      employee     = data.employee;
+      credentialId = data.credentialId;
+      showStep('webauthn');
+      startWebAuthn();
+
+    } catch (e) {
+      renderPinDots('error');
+      setPinMsg('Sin conexión — verifica tu red');
+      setTimeout(() => { pin = ''; renderPinDots(); setPinMsg(''); busy = false; }, 2000);
+    }
   }
 
-  function setPinKeysDisabled(val) {
-    document.querySelectorAll('.pin-key').forEach(function(b){
-      if (b.style.visibility !== 'hidden') b.disabled = val;
-    });
-  }
+  // ─── WEBAUTHN ─────────────────────────────────────────────
+  async function startWebAuthn() {
+    const waAvatar = document.getElementById('waAvatar');
+    const waName   = document.getElementById('waName');
+    waAvatar.textContent = employee.name.charAt(0).toUpperCase();
+    waName.textContent   = '¡Hola, ' + employee.name + '!';
 
-  // ── WebAuthn ──
-  function doFingerprint() {
-    if (!selCred) return;
-    var fpBtn = document.getElementById('fp-btn');
-    fpBtn.style.pointerEvents = 'none';
-    showMsg('info', '<span class="spinner"></span>Esperando huella...');
-    fetch(API_URL + '?action=challenge')
-      .then(function(r){ return r.json(); })
-      .then(function(data) {
-        var challengeBuf = new TextEncoder().encode(data.challenge);
-        var credIdBuf    = _b64ToBuffer(selCred);
-        return navigator.credentials.get({
-          publicKey: { challenge: challengeBuf, allowCredentials: [{ type: 'public-key', id: credIdBuf }], userVerification: 'required', timeout: 60000 }
-        }).then(function(assertion) {
-          authChallenge = data.challenge;
-          authCredId    = btoa(String.fromCharCode(...new Uint8Array(assertion.rawId)));
-          fpOk = true;
-          fpBtn.className = 'fp-btn verified'; fpBtn.style.pointerEvents = 'none';
-          setFpColor('#16A34A');
-          document.getElementById('fp-hint').textContent = '✓ Huella verificada';
-          document.getElementById('action-row').style.display = 'grid';
-          showMsg('ok', '✓ Todo verificado. Presiona Entrada o Salida.');
-          updateSteps();
-        });
-      })
-      .catch(function(err) {
-        fpBtn.style.pointerEvents = 'auto';
-        showMsg('err', err.name === 'NotAllowedError' ? 'Huella cancelada. Intenta de nuevo.' : 'Error: ' + err.message);
+    try {
+      // Obtener challenge del servidor
+      const res  = await fetch(`${GAS_URL}?action=challenge&employeeId=${employee.id}`);
+      const data = await res.json();
+      if (!data.success) throw new Error('No se pudo obtener challenge');
+
+      const challengeBytes = b64ToBytes(data.challenge);
+      const credBytes      = b64ToBytes(credentialId);
+
+      // Solicitar autenticación WebAuthn en el dispositivo registrado
+      const assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge:          challengeBytes,
+          allowCredentials:   [{ id: credBytes, type: 'public-key', transports: ['internal'] }],
+          userVerification:   'required',
+          timeout:            60000
+        }
       });
+
+      // Verificar que el credential usado es el registrado
+      const usedId = bytesToB64(new Uint8Array(assertion.rawId));
+      if (normalizeB64(usedId) !== normalizeB64(credentialId)) {
+        throw new Error('device_mismatch');
+      }
+
+      // Todo OK → mostrar botones de acción
+      showStep('action');
+
+    } catch (e) {
+      document.getElementById('waSpinner').style.display = 'none';
+      const errEl = document.getElementById('waErr');
+      errEl.classList.remove('hidden');
+
+      if (e.name === 'NotAllowedError') {
+        errEl.textContent = 'Autenticación cancelada. Vuelve a intentarlo.';
+      } else if (e.message === 'device_mismatch') {
+        errEl.textContent = '🚫 Este dispositivo no está autorizado para este empleado.';
+      } else {
+        errEl.textContent = '❌ Error de autenticación. Contacta al administrador.';
+      }
+
+      setTimeout(() => resetApp(), 3500);
+    }
   }
 
-  function setFpColor(c) {
-    ['fp-p1','fp-p2','fp-p3','fp-p4'].forEach(function(id){ var el = document.getElementById(id); if(el) el.setAttribute('stroke', c); });
-    var fc = document.getElementById('fp-c'); if(fc) fc.setAttribute('fill', c);
+  // ─── REGISTRAR ASISTENCIA ─────────────────────────────────
+  document.getElementById('btnEntrada').addEventListener('click', () => doAttendance('entrada'));
+  document.getElementById('btnSalida').addEventListener('click',  () => doAttendance('salida'));
+
+  async function doAttendance(type) {
+    setBtnsDisabled(true);
+    setActMsg('loading', 'Registrando…');
+
+    try {
+      const url = `${GAS_URL}?action=attendance` +
+        `&employeeId=${encodeURIComponent(employee.id)}` +
+        `&type=${type}` +
+        `&credentialId=${encodeURIComponent(credentialId)}` +
+        `&lat=${userLat}` +
+        `&lng=${userLng}`;
+
+      const res  = await fetch(url);
+      const data = await res.json();
+
+      if (!data.success) {
+        setActMsg('error', '❌ ' + data.error);
+        setBtnsDisabled(false);
+        return;
+      }
+
+      // Mostrar pantalla de éxito
+      const isEntrada = type === 'entrada';
+      const badge = document.getElementById('successBadge');
+      badge.className = 'success-badge ' + type;
+      document.getElementById('successIcon').textContent    = isEntrada ? '✓' : '✕';
+      document.getElementById('successTitle').textContent   = isEntrada ? 'ENTRADA' : 'SALIDA';
+      document.getElementById('successDetail').textContent  = employee.name;
+      document.getElementById('successTimeBig').textContent = data.time;
+      showStep('success');
+
+    } catch (e) {
+      setActMsg('error', '⚠️ Error de conexión — intenta de nuevo');
+      setBtnsDisabled(false);
+    }
   }
 
-  // ── Enviar registro ──
-  function submit(type) {
-    if (!selName || !pinOk || !fpOk) return;
-    document.getElementById('btn-e').disabled = true;
-    document.getElementById('btn-s').disabled = true;
-    showMsg('info', '<span class="spinner"></span>Registrando ' + type + '...');
-    var payload = { name: selName, type: type, method: selCred ? 'both' : 'pin', pin: pinVal };
-    if (selCred) { payload.credentialId = authCredId; payload.challenge = authChallenge; }
-    fetch(API_URL + '?action=attendance', {
-      method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload)
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(res) {
-      showMsg(res.ok ? 'ok' : 'err', res.msg);
-      if (res.ok) { setTimeout(resetAll, 3500); }
-      else { document.getElementById('btn-e').disabled = false; document.getElementById('btn-s').disabled = false; }
-    })
-    .catch(function() {
-      showMsg('err', 'Error de conexión. Intenta de nuevo.');
-      document.getElementById('btn-e').disabled = false; document.getElementById('btn-s').disabled = false;
-    });
+  function setBtnsDisabled(v) {
+    document.getElementById('btnEntrada').disabled = v;
+    document.getElementById('btnSalida').disabled  = v;
   }
 
-  // ── Reset completo ──
-  function resetAll() {
-    selName = null; selCred = null; pinVal = ''; pinOk = false; fpOk = false;
-    authChallenge = null; authCredId = null;
-    updatePinDisplay();
-    setPinKeysDisabled(false);
-    document.getElementById('pin-section').style.display    = 'block';
-    document.getElementById('welcome-card').style.display   = 'none';
-    document.getElementById('fp-section').style.display     = 'none';
-    document.getElementById('action-row').style.display     = 'none';
-    document.getElementById('msg').style.display            = 'none';
-    var fpBtn = document.getElementById('fp-btn');
-    fpBtn.className = 'fp-btn'; fpBtn.style.pointerEvents = 'auto';
-    setFpColor('#3B82F6');
-    document.getElementById('fp-hint').textContent = 'Toca para verificar tu huella';
-    updateSteps();
+  function setActMsg(cls, txt) {
+    const el = document.getElementById('actMsg');
+    el.className  = 'action-msg ' + cls;
+    el.textContent = txt;
   }
 
-  function showMsg(type, html) {
-    var el = document.getElementById('msg'); el.innerHTML = html; el.className = 'msg ' + type; el.style.display = 'block';
+  // ─── PASOS ────────────────────────────────────────────────
+  function showStep(step) {
+    document.getElementById('stepPin').style.display       = step === 'pin'      ? 'flex' : 'none';
+    document.getElementById('stepWebAuthn').style.display  = step === 'webauthn' ? 'flex' : 'none';
+    document.getElementById('stepAction').style.display    = step === 'action'   ? 'flex' : 'none';
+    document.getElementById('stepSuccess').style.display   = step === 'success'  ? 'flex' : 'none';
+
+    if (step === 'action') {
+      document.getElementById('actAvatar').textContent = employee.name.charAt(0).toUpperCase();
+      document.getElementById('actName').textContent   = employee.name;
+    }
   }
-  function _b64ToBuffer(b64) {
-    var bin = atob(b64.replace(/-/g,'+').replace(/_/g,'/'));
-    var buf = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i); return buf.buffer;
+
+  // ─── RESET ────────────────────────────────────────────────
+  function resetApp() {
+    pin          = '';
+    employee     = null;
+    credentialId = null;
+    busy         = false;
+    renderPinDots();
+    setPinMsg('');
+    setBtnsDisabled(false);
+    setActMsg('', '');
+    document.getElementById('waErr').classList.add('hidden');
+    document.getElementById('waSpinner').style.display = '';
+    showStep('pin');
+    // Refrescar ubicación
+    locationOK = false;
+    setGeo('checking', 'Verificando ubicación…');
+    initGeo();
   }
-</script>
+
+  // ─── UTILIDADES B64 ───────────────────────────────────────
+  function b64ToBytes(b64) {
+    const bin   = atob(b64.replace(/-/g, '+').replace(/_/g, '/'));
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  }
+
+  function bytesToB64(bytes) {
+    let bin = '';
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+
+  function normalizeB64(s) {
+    return s.replace(/-/g, '+').replace(/_/g, '/').replace(/=/g, '');
+  }
+
+  function haversine(lat1, lng1, lat2, lng2) {
+    const R    = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a    = Math.sin(dLat/2) ** 2 +
+      Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  // ─── INIT ─────────────────────────────────────────────────
+  showStep('pin');
+  initGeo();
+  </script>
 </body>
 </html>
